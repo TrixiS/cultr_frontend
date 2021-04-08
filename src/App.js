@@ -9,7 +9,6 @@ import {
   Route,
   Link,
   Redirect,
-  withRouter,
 } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import LoginPage from "./components/LoginPage";

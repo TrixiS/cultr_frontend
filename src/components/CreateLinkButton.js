@@ -9,7 +9,6 @@ export default function CreateLinkButton(props) {
 
   const handleFinish = async (values) => {
     setIsLoading(true);
-    console.log(JSON.stringify(values));
     await props.onCreate(values);
     setIsLoading(false);
     closeModal();

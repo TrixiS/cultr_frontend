@@ -1,9 +1,7 @@
 import Login from "./LoginPage";
 
 class RegisterPage extends Login {
-  handleFinish(values) {
-    console.log("Register");
-  }
+  handleFinish(values) {}
 }
 
 export default RegisterPage;

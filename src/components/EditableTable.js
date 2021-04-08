@@ -101,9 +101,7 @@ const EditableTable = ({
 
       const newItem = newData[newData.findIndex((item) => key === item.key)];
       if (onEdit) await onEdit(item, newItem);
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
+    } catch (errInfo) {}
   };
 
   const copy = (record) =>
