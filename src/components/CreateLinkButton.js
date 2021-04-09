@@ -1,7 +1,7 @@
 import { Button, Modal, Form, DatePicker, Input, InputNumber } from "antd";
 import { useState } from "react";
 
-export default function CreateLinkButton(props) {
+export default function CreateLinkButton({ onCreate, ...rest }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -9,7 +9,7 @@ export default function CreateLinkButton(props) {
 
   const handleFinish = async (values) => {
     setIsLoading(true);
-    await props.onCreate(values);
+    await onCreate(values);
     setIsLoading(false);
     closeModal();
   };
@@ -20,7 +20,7 @@ export default function CreateLinkButton(props) {
         type="primary"
         loading={isLoading}
         onClick={() => setIsModalVisible(true)}
-        {...props}
+        {...rest}
       >
         Create
       </Button>

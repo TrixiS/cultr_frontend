@@ -58,10 +58,10 @@ export default function UrlsPage(props) {
         return;
       }
 
+      if (isLoading) setIsLoading(false);
       if (resData === null || !resData.length) return;
       setData([...data, ...resData]);
       setCurrentPage(currentPage + 1);
-      if (isLoading) setIsLoading(false);
     }
     fetchTableData();
   }, [currentPage]);
