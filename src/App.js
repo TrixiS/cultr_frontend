@@ -1,8 +1,9 @@
-import "./App.css";
+import "./css/App.css";
 import "antd/dist/antd.css";
 import { Layout, Menu } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import createPersistedState from "use-persisted-state";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,13 +11,16 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
-import HomePage from "./components/HomePage";
-import LoginPage from "./components/LoginPage";
-import UrlsPage from "./components/UrlsPage";
-import LogoutPage from "./components/LogoutPage";
-import LoginControl from "./components/LoginControl";
-import PrivateRoute from "./components/PrivateRoute";
-import ErrorBoundary from "./components/ErrorBoundary";
+
+import {
+  LoginControl,
+  LoginPage,
+  LogoutPage,
+  PrivateRoute,
+  ErrorBoundary,
+  HomePage,
+  UrlsPage,
+} from "./components";
 
 const { Header, Content, Footer } = Layout;
 const localStorageTokenKey = "jwtToken";
@@ -42,9 +46,8 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Layout className="layout">
+        <Layout>
           <Header className="header-navbar">
-            {/* <div className="logo" /> */}
             <Menu theme="dark" mode="horizontal">
               <Menu.Item key="home">
                 <Link to="/">Home</Link>

@@ -1,4 +1,4 @@
-import Login from "./LoginPage";
+import { Login } from ".";
 
 class RegisterPage extends Login {
   handleFinish(values) {}

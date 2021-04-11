@@ -2,9 +2,7 @@ import "../css/UrlsPage.css";
 import React, { useState, useEffect } from "react";
 import { fetchApi } from "../hooks/useApi";
 import { useError } from "../hooks/useError";
-import EditableTable from "./EditableTable";
-import Loading from "./Loading";
-import CreateLinkButton from "./CreateLinkButton";
+import { Loading, CreateLinkButton, EditableTable } from ".";
 
 const columns = [
   {
