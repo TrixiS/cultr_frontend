@@ -1,7 +1,5 @@
 FROM node:13.12.0-alpine as build
 
-# Make api url env var
-
 WORKDIR /cultr_front
 
 ENV PATH /cultr_front/node_modules/.bin:$PATH

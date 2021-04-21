@@ -2,7 +2,6 @@ import React from "react";
 import { Form, Input, Button, Space } from "antd";
 import { Redirect } from "react-router-dom";
 import "../css/LoginPage.css";
-import config from "../config";
 
 // TODO?: make LoginPage a function
 
@@ -16,7 +15,7 @@ function login(username, password) {
     body: formData,
   };
 
-  return fetch(config.apiUrl + "token", requestOptions);
+  return fetch(process.env.REACT_APP_API_URL + "token", requestOptions);
 }
 
 class LoginPage extends React.Component {

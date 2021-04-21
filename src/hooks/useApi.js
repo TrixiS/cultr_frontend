@@ -1,10 +1,9 @@
 import { useState, useCallback } from "react";
-import config from "../config";
 
 export const fetchApi = async (method, options, token) => {
   if (!options.headers) options.headers = {};
   options.headers.Authorization = `Bearer ${token}`;
-  const response = await fetch(config.apiUrl + method, options);
+  const response = await fetch(process.env.REACT_APP_API_URL + method, options);
   const data = await response.json();
   return [response, data];
 };
