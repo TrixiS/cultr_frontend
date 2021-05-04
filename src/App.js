@@ -30,10 +30,8 @@ const useUserTokenState = createPersistedState(localStorageTokenKey);
 // TODO: footer dev
 // TODO: logo
 
-function App() {
+export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-
-  // TODO: AuthContext
   const [token, setUserToken] = useUserTokenState(
     localStorage.getItem(localStorageTokenKey)
   );
@@ -95,5 +93,3 @@ function App() {
     </Router>
   );
 }
-
-export default App;

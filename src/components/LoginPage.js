@@ -1,10 +1,7 @@
-import React from "react";
-import { Form, Input, Button, Space } from "antd";
+import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
+import { Form, Input, Button, Space } from "antd";
 import "../css/LoginPage.css";
-
-// TODO!!!: make LoginPage a function
-//          useContext
 
 function login(username, password) {
   const formData = new FormData();
@@ -19,81 +16,71 @@ function login(username, password) {
   return fetch(process.env.REACT_APP_API_URL + "token", requestOptions);
 }
 
-class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      redirectToReferrer: false,
-      loginError: null,
-    };
-  }
+export default function LoginPage(props) {
+  const [redirectToReferrer, setRedirectToReferrer] = useState(false);
+  const [loginError, setLoginError] = useState(null);
 
-  handleFinish(values) {
+  const handleFinish = (values) => {
     login(values.username, values.password).then((res) => {
       res.json().then((data) => {
         if (res.ok) {
-          this.props.setUserToken(data.access_token);
-          this.setState({ redirectToReferrer: true });
+          props.setUserToken(data.access_token);
+          setRedirectToReferrer(true);
         } else {
-          this.setState({ loginError: data.detail });
+          setLoginError(data.detail);
         }
       });
     });
-  }
+  };
 
-  render() {
-    if (this.state.redirectToReferrer)
-      return <Redirect to={this.props.referrer ?? "/"} />;
+  if (redirectToReferrer) return <Redirect to={props.referrer ?? "/"} />;
 
-    return (
-      <div className="centered">
-        <Space direction="vertical">
-          {this.state.loginError && (
-            <div className="error">{this.state.loginError}</div> // TODO: Error component uses antd.Alert
-          )}
+  return (
+    <div className="centered">
+      <Space direction="vertical">
+        {loginError && (
+          <div className="error">{loginError}</div> // TODO: Error component uses antd.Alert
+        )}
 
-          <Form
-            name="login"
-            layout="vertical"
-            onFinish={(values) => this.handleFinish(values)}
-            size="large"
+        <Form
+          name="login"
+          layout="vertical"
+          onFinish={(values) => handleFinish(values)}
+          size="large"
+        >
+          <Form.Item
+            label="Username"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "You have to specify your username",
+              },
+            ]}
           >
-            <Form.Item
-              label="Username"
-              name="username"
-              rules={[
-                {
-                  required: true,
-                  message: "You have to specify your username",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+            <Input />
+          </Form.Item>
 
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "You have to specify your password",
-                },
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "You have to specify your password",
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
 
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-        </Space>
-      </div>
-    );
-  }
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Space>
+    </div>
+  );
 }
-
-export default LoginPage;

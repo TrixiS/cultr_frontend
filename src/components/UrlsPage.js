@@ -1,13 +1,10 @@
 import "../css/UrlsPage.css";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchApi } from "../hooks/useApi";
 import { useError } from "../hooks/useError";
+import { useLoading } from "../hooks/useLoading";
 import { CreateLinkButton, EditableTable } from ".";
 import { Typography } from "antd";
-// import { LoadingContext } from "./Loading";
-import { useLoading } from "../hooks/useLoading";
-
-// TODO: resolve imports (make it from .)
 
 const columns = [
   {
@@ -40,8 +37,7 @@ const columns = [
   },
 ];
 
-// TODO: separate loading page
-//        and hook for api
+// TODO: hook for api
 
 export default function UrlsPage(props) {
   const [data, setData] = useState([]);
@@ -50,7 +46,7 @@ export default function UrlsPage(props) {
   const throwError = useError();
 
   useEffect(() => {
-    async function fetchTableData() {
+    const fetchTableData = async () => {
       const [res, resData] = await fetchApi(
         `v1/urls?page=${currentPage}&items=25`,
         { method: "GET" },
@@ -67,7 +63,8 @@ export default function UrlsPage(props) {
       if (resData === null || !resData.length) return;
       setData((d) => [...d, ...resData]);
       setCurrentPage(currentPage + 1);
-    }
+    };
+
     fetchTableData();
   }, [currentPage]);
 
