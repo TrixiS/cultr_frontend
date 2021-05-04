@@ -1,8 +1,13 @@
 import "../css/UrlsPage.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { fetchApi } from "../hooks/useApi";
 import { useError } from "../hooks/useError";
-import { Loading, CreateLinkButton, EditableTable } from ".";
+import { CreateLinkButton, EditableTable } from ".";
+import { Typography } from "antd";
+// import { LoadingContext } from "./Loading";
+import { useLoading } from "../hooks/useLoading";
+
+// TODO: resolve imports (make it from .)
 
 const columns = [
   {
@@ -16,6 +21,7 @@ const columns = [
     dataIndex: "destination",
     width: "40%",
     editable: true,
+    render: (text) => <Typography.Link href={text}>{text}</Typography.Link>,
   },
   {
     title: "Uses",
@@ -38,9 +44,9 @@ const columns = [
 //        and hook for api
 
 export default function UrlsPage(props) {
-  const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const { isLoading, setIsLoading } = useLoading();
   const throwError = useError();
 
   useEffect(() => {
@@ -51,20 +57,19 @@ export default function UrlsPage(props) {
         props.userToken
       );
 
+      setIsLoading(false);
+
       if (!res.ok && res.status === 401) {
         throwError({ text: resData.detail, status: res.status });
         return;
       }
 
-      if (isLoading) setIsLoading(false);
       if (resData === null || !resData.length) return;
-      setData([...data, ...resData]);
+      setData((d) => [...d, ...resData]);
       setCurrentPage(currentPage + 1);
     }
     fetchTableData();
   }, [currentPage]);
-
-  if (isLoading) return <Loading />;
 
   const handleEdit = async (before, after) => {
     const [res, resData] = await fetchApi(
@@ -117,23 +122,27 @@ export default function UrlsPage(props) {
 
   return (
     <>
-      <CreateLinkButton
-        size="large"
-        className="create-link-button"
-        onCreate={handleCreate}
-      />
-      <EditableTable
-        className="urls-table"
-        columns={columns}
-        tableData={data.map((item) => {
-          item.key = item.id.toString();
-          return item;
-        })}
-        setTableData={setData}
-        scroll={{ x: true }}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      {isLoading === false && (
+        <>
+          <CreateLinkButton
+            size="large"
+            className="create-link-button"
+            onCreate={handleCreate}
+          />
+          <EditableTable
+            className="urls-table"
+            columns={columns}
+            tableData={data.map((item) => {
+              item.key = item.id.toString();
+              return item;
+            })}
+            setTableData={setData}
+            scroll={{ x: true }}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        </>
+      )}
     </>
   );
 }

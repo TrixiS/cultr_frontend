@@ -64,6 +64,8 @@ const EditableTable = ({
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.key === editingKey;
 
+  // TODO: state for tableData = useState([...props.data]);
+
   const cancel = () => {
     setEditingKey("");
   };

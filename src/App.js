@@ -1,8 +1,9 @@
 import "./css/App.css";
 import "antd/dist/antd.css";
-import { Layout, Menu } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import createPersistedState from "use-persisted-state";
+import { Layout, Menu } from "antd";
+import Loading, { LoadingContext } from "./components/Loading";
 
 import {
   BrowserRouter as Router,
@@ -23,13 +24,16 @@ import {
 } from "./components";
 
 const { Header, Content, Footer } = Layout;
-const localStorageTokenKey = "jwtToken";
+const localStorageTokenKey = "access_token";
 const useUserTokenState = createPersistedState(localStorageTokenKey);
 
 // TODO: footer dev
 // TODO: logo
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  // TODO: AuthContext
   const [token, setUserToken] = useUserTokenState(
     localStorage.getItem(localStorageTokenKey)
   );
@@ -64,22 +68,26 @@ function App() {
           </Header>
           <Content style={{ padding: "0 2vh" }}>
             <div className="site-layout-content">
-              <Switch>
-                <Route path="/login">
-                  <LoginPage setUserToken={setUserToken} referrer="/urls" />
-                </Route>
-                <Route exact path="/logout">
-                  <LogoutPage setUserToken={setUserToken} />
-                </Route>
-                <PrivateRoute exact path="/urls" userToken={token}>
-                  <ErrorBoundary onError={handleError}>
-                    <UrlsPage userToken={token} />
-                  </ErrorBoundary>
-                </PrivateRoute>
-                <Route exact path="/">
-                  <HomePage />
-                </Route>
-              </Switch>
+              <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+                <Loading>
+                  <Switch>
+                    <Route path="/login">
+                      <LoginPage setUserToken={setUserToken} referrer="/urls" />
+                    </Route>
+                    <Route exact path="/logout">
+                      <LogoutPage setUserToken={setUserToken} />
+                    </Route>
+                    <PrivateRoute exact path="/urls" userToken={token}>
+                      <ErrorBoundary onError={handleError}>
+                        <UrlsPage userToken={token} />
+                      </ErrorBoundary>
+                    </PrivateRoute>
+                    <Route exact path="/">
+                      <HomePage />
+                    </Route>
+                  </Switch>
+                </Loading>
+              </LoadingContext.Provider>
             </div>
           </Content>
         </Layout>
