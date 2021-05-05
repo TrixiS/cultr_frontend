@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useApi } from "../hooks/useApi";
 import { useLoading } from "../hooks/useLoading";
 import { CreateLinkButton, EditableTable } from ".";
-import { Typography } from "antd";
+import { Typography, Space } from "antd";
 
 const columns = [
   {
@@ -84,28 +84,26 @@ export default function UrlsPage() {
   };
 
   return (
-    <>
-      {!isLoading && (
-        <>
-          <CreateLinkButton
-            size="large"
-            className="create-link-button"
-            onCreate={handleCreate}
-          />
-          <EditableTable
-            className="urls-table"
-            columns={columns}
-            tableData={data.map((item) => {
-              item.key = item.id.toString();
-              return item;
-            })}
-            setTableData={setData}
-            scroll={{ x: true }}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        </>
-      )}
-    </>
+    !isLoading && (
+      <Space direction="vertical">
+        <CreateLinkButton
+          size="large"
+          className="create-link-button"
+          onCreate={handleCreate}
+        />
+        <EditableTable
+          className="urls-table"
+          columns={columns}
+          tableData={data.map((item) => {
+            item.key = item.id.toString();
+            return item;
+          })}
+          setTableData={setData}
+          scroll={{ x: true }}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      </Space>
+    )
   );
 }

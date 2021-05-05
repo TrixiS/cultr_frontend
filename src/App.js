@@ -86,29 +86,31 @@ export default function App() {
             </Header>
             <Content style={{ padding: "0 2vh" }}>
               <div className="site-layout-content">
-                <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-                  <Loading>
-                    <Switch>
-                      <Route path="/login">
-                        <LoginPage
-                          setUserToken={setUserToken}
-                          referrer="/urls"
-                        />
-                      </Route>
-                      <Route exact path="/logout">
-                        <LogoutPage setUserToken={setUserToken} />
-                      </Route>
-                      <PrivateRoute exact path="/urls">
-                        <ErrorBoundary onError={handleError}>
-                          <UrlsPage />
-                        </ErrorBoundary>
-                      </PrivateRoute>
-                      <Route exact path="/">
-                        <HomePage />
-                      </Route>
-                    </Switch>
-                  </Loading>
-                </LoadingContext.Provider>
+                <Layout style={{ backgroundColor: "#fff" }}>
+                  <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+                    <Loading>
+                      <Switch>
+                        <Route path="/login">
+                          <LoginPage
+                            setUserToken={setUserToken}
+                            referrer="/urls"
+                          />
+                        </Route>
+                        <Route exact path="/logout">
+                          <LogoutPage setUserToken={setUserToken} />
+                        </Route>
+                        <PrivateRoute exact path="/urls">
+                          <ErrorBoundary onError={handleError}>
+                            <UrlsPage />
+                          </ErrorBoundary>
+                        </PrivateRoute>
+                        <Route exact path="/">
+                          <HomePage />
+                        </Route>
+                      </Switch>
+                    </Loading>
+                  </LoadingContext.Provider>
+                </Layout>
               </div>
             </Content>
           </Layout>
