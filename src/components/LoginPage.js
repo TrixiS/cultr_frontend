@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
+import { useLoading } from "../hooks/useLoading";
 import { Form, Input, Button, Space } from "antd";
 import "../css/LoginPage.css";
+import { AuthContext } from "../context/authContext";
 
 function login(username, password) {
   const formData = new FormData();
@@ -16,24 +18,28 @@ function login(username, password) {
   return fetch(process.env.REACT_APP_API_URL + "token", requestOptions);
 }
 
-export default function LoginPage(props) {
-  const [redirectToReferrer, setRedirectToReferrer] = useState(false);
+export default function LoginPage({ setUserToken, referrer }) {
   const [loginError, setLoginError] = useState(null);
+  const authState = useContext(AuthContext);
+  const { setIsLoading } = useLoading();
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [setIsLoading]);
 
   const handleFinish = (values) => {
-    login(values.username, values.password).then((res) => {
-      res.json().then((data) => {
-        if (res.ok) {
-          props.setUserToken(data.access_token);
-          setRedirectToReferrer(true);
-        } else {
-          setLoginError(data.detail);
-        }
-      });
-    });
+    login(values.username, values.password).then((res) =>
+      res
+        .json()
+        .then((data) =>
+          res.ok ? setUserToken(data.access_token) : setLoginError(data.detail)
+        )
+    );
   };
 
-  if (redirectToReferrer) return <Redirect to={props.referrer ?? "/"} />;
+  // TODO: use AuthOnly here
+  //      wrap form into separate component
+  if (authState.accessToken) return <Redirect to={referrer ?? "/"} />;
 
   return (
     <div className="centered">

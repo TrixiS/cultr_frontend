@@ -10,6 +10,6 @@ export const useLoading = () => {
 
   return {
     isLoading,
-    setIsLoading: useCallback((e) => setIsLoading(e), [setIsLoading]),
+    setIsLoading: useCallback((value) => setIsLoading(value), [setIsLoading]),
   };
 };

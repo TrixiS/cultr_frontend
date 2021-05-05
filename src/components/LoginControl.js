@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 import { Link } from "react-router-dom";
 
-function LoginControl(props) {
-  if (!props.userToken) return <Link to="/login">Login</Link>;
-  return <Link to="/logout">Logout</Link>;
-}
+export default function LoginControl() {
+  const authState = useContext(AuthContext);
 
-export default LoginControl;
+  return (
+    <>
+      {authState.user === null ? (
+        <Link to="/login">Login</Link>
+      ) : (
+        <Link to="/logout">Logout</Link>
+      )}
+    </>
+  );
+}

@@ -7,7 +7,7 @@ function HomePage() {
 
   useEffect(() => {
     setIsLoading(false);
-  }, []);
+  }, [setIsLoading]);
 
   const alertMessage = `The application is still under development.
   If you want to test it, use "user" login and password.`;

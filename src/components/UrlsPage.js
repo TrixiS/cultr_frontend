@@ -1,7 +1,6 @@
 import "../css/UrlsPage.css";
 import React, { useState, useEffect } from "react";
-import { fetchApi } from "../hooks/useApi";
-import { useError } from "../hooks/useError";
+import { useApi } from "../hooks/useApi";
 import { useLoading } from "../hooks/useLoading";
 import { CreateLinkButton, EditableTable } from ".";
 import { Typography } from "antd";
@@ -37,30 +36,24 @@ const columns = [
   },
 ];
 
-// TODO: hook for api
-
-export default function UrlsPage(props) {
+export default function UrlsPage() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const { isLoading, setIsLoading } = useLoading();
-  const throwError = useError();
+  const { execute } = useApi();
 
   useEffect(() => {
     const fetchTableData = async () => {
-      const [res, resData] = await fetchApi(
+      const [res, resData] = await execute(
         `v1/urls?page=${currentPage}&items=25`,
-        { method: "GET" },
-        props.userToken
+        {
+          method: "GET",
+        }
       );
 
       setIsLoading(false);
 
-      if (!res.ok && res.status === 401) {
-        throwError({ text: resData.detail, status: res.status });
-        return;
-      }
-
-      if (resData === null || !resData.length) return;
+      if (!res.ok || resData === null || !resData.length) return;
       setData((d) => [...d, ...resData]);
       setCurrentPage((page) => page + 1);
     };
@@ -68,58 +61,31 @@ export default function UrlsPage(props) {
     fetchTableData();
   }, [currentPage]);
 
-  const handleEdit = async (before, after) => {
-    const [res, resData] = await fetchApi(
-      `v1/urls/${before.name}`,
-      {
-        method: "PUT",
-        body: JSON.stringify({
-          name: after.name,
-          destination: after.destination,
-          max_uses: after.max_uses,
-        }),
-      },
-      props.userToken
-    );
+  const handleEdit = async (before, after) =>
+    await execute(`v1/urls/${before.name}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        name: after.name,
+        destination: after.destination,
+        max_uses: after.max_uses,
+      }),
+    });
 
-    if (!res.ok && res.status === 401)
-      throwError({ text: resData.detail, status: res.status });
-  };
-
-  const handleDelete = async (record) => {
-    const [res, resData] = await fetchApi(
-      `v1/urls/${record.name}`,
-      { method: "DELETE" },
-      props.userToken
-    );
-
-    if (!res.ok && res.status === 401)
-      throwError({ text: resData.detail, status: res.status });
-  };
+  const handleDelete = async (record) =>
+    await execute(`v1/urls/${record.name}`, { method: "DELETE" });
 
   const handleCreate = async (values) => {
-    const [res, resData] = await fetchApi(
-      "v1/urls",
-      {
-        method: "POST",
-        body: JSON.stringify(values),
-      },
-      props.userToken
-    );
+    const [res, resData] = await execute("v1/urls", {
+      method: "POST",
+      body: JSON.stringify(values),
+    });
 
-    if (!res.ok) {
-      if (res.status === 401)
-        throwError({ text: resData.detail, status: res.status });
-
-      return;
-    }
-
-    setData([...data, resData]);
+    if (res.ok) setData([...data, resData]);
   };
 
   return (
     <>
-      {isLoading === false && (
+      {!isLoading && (
         <>
           <CreateLinkButton
             size="large"
