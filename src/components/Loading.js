@@ -1,15 +1,10 @@
 import React, { useContext } from "react";
 import { Layout, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingContext } from "../context/loadingContext";
 import "../css/Loading.css";
 
 const { Content } = Layout;
-
-export const LoadingContext = React.createContext({
-  isLoading: true,
-  setIsLoading: () => {},
-});
-
 const spinner = <LoadingOutlined spin />;
 
 export default function Loading({ children }) {

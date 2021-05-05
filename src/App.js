@@ -3,7 +3,7 @@ import "antd/dist/antd.css";
 import React, { useState } from "react";
 import createPersistedState from "use-persisted-state";
 import { Layout, Menu } from "antd";
-import Loading, { LoadingContext } from "./components/Loading";
+import { LoadingContext } from "./context/loadingContext";
 
 import {
   BrowserRouter as Router,
@@ -21,6 +21,7 @@ import {
   ErrorBoundary,
   HomePage,
   UrlsPage,
+  Loading,
 } from "./components";
 
 const { Header, Content, Footer } = Layout;

@@ -62,7 +62,7 @@ export default function UrlsPage(props) {
 
       if (resData === null || !resData.length) return;
       setData((d) => [...d, ...resData]);
-      setCurrentPage(currentPage + 1);
+      setCurrentPage((page) => page + 1);
     };
 
     fetchTableData();
