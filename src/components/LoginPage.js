@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import { useLoading } from "../hooks/useLoading";
 import { Form, Input, Button, Space } from "antd";
 import "../css/LoginPage.css";
 import { AuthContext } from "../context/authContext";
@@ -21,11 +20,6 @@ function login(username, password) {
 export default function LoginPage({ setUserToken, referrer }) {
   const [loginError, setLoginError] = useState(null);
   const authState = useContext(AuthContext);
-  const { setIsLoading } = useLoading();
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, [setIsLoading]);
 
   const handleFinish = (values) => {
     login(values.username, values.password).then((res) =>
@@ -37,8 +31,6 @@ export default function LoginPage({ setUserToken, referrer }) {
     );
   };
 
-  // TODO: use AuthOnly here
-  //      wrap form into separate component
   if (authState.accessToken) return <Redirect to={referrer ?? "/"} />;
 
   return (

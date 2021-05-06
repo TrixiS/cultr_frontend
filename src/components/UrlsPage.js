@@ -39,7 +39,7 @@ const columns = [
 export default function UrlsPage() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const { isLoading, setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading(true);
   const { execute } = useApi();
 
   useEffect(() => {

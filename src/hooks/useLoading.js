@@ -1,11 +1,11 @@
 import { useCallback, useContext, useEffect } from "react";
 import { LoadingContext } from "../context/loadingContext";
 
-export const useLoading = () => {
+export const useLoading = (loading) => {
   const { isLoading, setIsLoading } = useContext(LoadingContext);
 
   useEffect(() => {
-    setIsLoading(() => true);
+    setIsLoading(loading ?? false);
   }, [setIsLoading]);
 
   return {

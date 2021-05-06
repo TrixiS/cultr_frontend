@@ -1,11 +1,11 @@
-import "./css/App.css";
-import "antd/dist/antd.css";
 import React, { useState, useEffect } from "react";
 import createPersistedState from "use-persisted-state";
 import { Layout, Menu } from "antd";
 import { LoadingContext } from "./context/loadingContext";
 import { AuthContext } from "./context/authContext";
 import { fetchApi } from "./hooks/useApi";
+import "./css/App.css";
+import "antd/dist/antd.css";
 
 import {
   BrowserRouter as Router,
@@ -24,6 +24,7 @@ import {
   HomePage,
   UrlsPage,
   Loading,
+  ProfilePage,
 } from "./components";
 
 const { Header, Content, Footer } = Layout;
@@ -34,7 +35,7 @@ const useUserTokenState = createPersistedState(localStorageTokenKey);
 // TODO: logo
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [token, setUserToken] = useUserTokenState(
     localStorage.getItem(localStorageTokenKey)
   );
@@ -73,15 +74,10 @@ export default function App() {
                 <Menu.Item key="home">
                   <Link to="/">Home</Link>
                 </Menu.Item>
-                <Menu.Item className="auth-button" key="login">
-                  <LoginControl />
+                <LoginControl className="auth-button" key="login" />
+                <Menu.Item key="urls" hidden={authState.user === null}>
+                  <Link to="/urls">Urls</Link>
                 </Menu.Item>
-                {/* // TODO: AuthOnly component */}
-                {token !== null && (
-                  <Menu.Item key="urls">
-                    <Link to="/urls">Urls</Link>
-                  </Menu.Item>
-                )}
               </Menu>
             </Header>
             <Content style={{ padding: "0 2vh" }}>
@@ -93,7 +89,7 @@ export default function App() {
                         <Route path="/login">
                           <LoginPage
                             setUserToken={setUserToken}
-                            referrer="/urls"
+                            referrer="/urls" // TODO: current path, try to move boundary inside private route
                           />
                         </Route>
                         <Route exact path="/logout">
@@ -102,6 +98,11 @@ export default function App() {
                         <PrivateRoute exact path="/urls">
                           <ErrorBoundary onError={handleError}>
                             <UrlsPage />
+                          </ErrorBoundary>
+                        </PrivateRoute>
+                        <PrivateRoute exact path="/profile">
+                          <ErrorBoundary onError={handleError}>
+                            <ProfilePage />
                           </ErrorBoundary>
                         </PrivateRoute>
                         <Route exact path="/">

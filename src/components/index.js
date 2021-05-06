@@ -8,6 +8,7 @@ import LoginPage from "./LoginPage";
 import LogoutPage from "./LogoutPage";
 import UrlsPage from "./UrlsPage";
 import HomePage from "./HomePage";
+import ProfilePage from "./ProfilePage";
 
 export {
   CreateLinkButton,
@@ -20,4 +21,5 @@ export {
   LogoutPage,
   UrlsPage,
   HomePage,
+  ProfilePage,
 };
