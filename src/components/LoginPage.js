@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Input, Button, Space } from "antd";
-import "../css/LoginPage.css";
 import { AuthContext } from "../context/authContext";
+import "../css/LoginPage.css";
 
 function login(username, password) {
   const formData = new FormData();
@@ -17,21 +17,31 @@ function login(username, password) {
   return fetch(process.env.REACT_APP_API_URL + "token", requestOptions);
 }
 
-export default function LoginPage({ setUserToken, referrer }) {
+export default function LoginPage({ setAccessToken, referrer }) {
   const [loginError, setLoginError] = useState(null);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
   const authState = useContext(AuthContext);
 
   const handleFinish = (values) => {
     login(values.username, values.password).then((res) =>
-      res
-        .json()
-        .then((data) =>
-          res.ok ? setUserToken(data.access_token) : setLoginError(data.detail)
-        )
+      res.json().then((data) => {
+        if (res.ok) {
+          setAccessToken(data.access_token);
+          setShouldRedirect(true);
+          return;
+        }
+
+        setLoginError(data.detail);
+      })
     );
   };
 
-  if (authState.accessToken) return <Redirect to={referrer ?? "/"} />;
+  if (
+    shouldRedirect &&
+    authState.accessToken !== null &&
+    authState.user !== null
+  )
+    return <Redirect to={referrer ?? "/"} />;
 
   return (
     <div className="centered">

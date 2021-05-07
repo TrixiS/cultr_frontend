@@ -36,28 +36,28 @@ const useUserTokenState = createPersistedState(localStorageTokenKey);
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
-  const [token, setUserToken] = useUserTokenState(
+  const [accessToken, setAccessToken] = useUserTokenState(
     localStorage.getItem(localStorageTokenKey)
   );
   const [authState, setAuthState] = useState({
-    accessToken: token,
+    accessToken,
     user: null,
   });
 
   useEffect(() => {
-    if (token === null) {
+    if (accessToken === null) {
       setAuthState({ accessToken: null, user: null });
       return;
     }
 
-    fetchApi("users/@me", { method: "GET" }, token).then(([res, data]) =>
-      setAuthState({ accessToken: token, user: res.ok ? data : null })
+    fetchApi("users/@me", { method: "GET" }, accessToken).then(([res, data]) =>
+      setAuthState({ accessToken, user: res.ok ? data : null })
     );
-  }, [token]);
+  }, [accessToken]);
 
   const handleError = (error) => {
     if (error.status === 401) {
-      setUserToken(null);
+      setAccessToken(null);
       return <Redirect to="/login" />;
     }
 
@@ -88,12 +88,12 @@ export default function App() {
                       <Switch>
                         <Route path="/login">
                           <LoginPage
-                            setUserToken={setUserToken}
+                            setAccessToken={setAccessToken}
                             referrer="/urls" // TODO: current path, try to move boundary inside private route
                           />
                         </Route>
                         <Route exact path="/logout">
-                          <LogoutPage setUserToken={setUserToken} />
+                          <LogoutPage setAccessToken={setAccessToken} />
                         </Route>
                         <PrivateRoute exact path="/urls">
                           <ErrorBoundary onError={handleError}>

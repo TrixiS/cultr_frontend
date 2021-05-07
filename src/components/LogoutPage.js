@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 function LogoutPage(props) {
   useEffect(() => {
-    props.setUserToken(null);
+    props.setAccessToken(null);
   });
 
   return <Redirect to={props.referrer ?? "/"} />;
