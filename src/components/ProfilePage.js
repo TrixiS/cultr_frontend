@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import { Divider, Row, Col, Card, Typography, Input, Form, Button } from "antd";
+import { CheckOutlined, WarningOutlined } from "@ant-design/icons";
 
 const CardForm = ({ items, cardProps, ...rest }) => {
   const labelColStyle = { width: "30%" };
@@ -44,10 +45,6 @@ export default function ProfilePage() {
       value: authState.user?.username,
     },
     {
-      name: ["email"],
-      value: authState.user?.email,
-    },
-    {
       name: ["password"],
       value: "",
     },
@@ -65,8 +62,19 @@ export default function ProfilePage() {
     },
     {
       label: "Email",
-      content: <Input value={fields[1].value ?? authState.user?.email} />,
-      itemProps: { name: "email" },
+      content: (
+        <Input
+          value={authState.user?.email}
+          addonAfter={
+            authState.user?.email_confirmed ? (
+              <CheckOutlined style={{ color: "green" }} />
+            ) : (
+              <WarningOutlined style={{ color: "red" }} />
+            )
+          }
+          disabled
+        />
+      ),
     },
     {
       label: "Password",
@@ -76,6 +84,7 @@ export default function ProfilePage() {
   ];
 
   // TODO: use just form and layout (may be layout={grid} or something)
+  // TODO: move fields inside form component
   return (
     <CardForm
       title="Profile settings"

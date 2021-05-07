@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
-const UserMenu = ({ authState, ...props }) => {
+const UserMenu = ({ authState, ...rest }) => {
   return (
     <Menu.SubMenu
       icon={<UserOutlined />}
       title={authState.user?.username}
-      {...props}
+      {...rest}
     >
       <Menu.Item key="profile">
         <Link to="profile">Profile</Link>

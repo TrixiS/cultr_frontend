@@ -44,6 +44,10 @@ export default function App() {
     user: null,
   });
 
+  // useEffect(() => {
+  //   setIsLoading(false);
+  // }, [isLoading]);
+
   useEffect(() => {
     if (accessToken === null) {
       setAuthState({ accessToken: null, user: null });

@@ -5,7 +5,7 @@ import { AuthContext } from "../context/authContext";
 export default function PrivateRoute({ children, ...rest }) {
   const authState = useContext(AuthContext);
 
-  return authState.accessToken === null ? (
+  return authState.accessToken === null || authState.user === null ? (
     <Redirect to="/login" />
   ) : (
     <Route {...rest}>{children}</Route>
