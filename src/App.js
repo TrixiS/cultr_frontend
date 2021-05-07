@@ -54,13 +54,18 @@ export default function App() {
       return;
     }
 
-    fetchApi("users/@me", { method: "GET" }, accessToken).then(([res, data]) =>
-      setAuthState({ accessToken, user: res.ok ? data : null })
+    setIsLoading(true);
+
+    fetchApi("users/@me", { method: "GET" }, accessToken).then(
+      ([res, data]) => {
+        setAuthState({ accessToken, user: res.ok ? data : null });
+        setIsLoading(false);
+      }
     );
   }, [accessToken]);
 
   const handleError = (error) => {
-    if (error.status === 401) {
+    if (error.status === 401 && !isLoading) {
       setAccessToken(null);
       return <Redirect to="/login" />;
     }

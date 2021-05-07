@@ -1,113 +1,104 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/authContext";
-import { Divider, Row, Col, Card, Typography, Input, Form, Button } from "antd";
-import { CheckOutlined, WarningOutlined } from "@ant-design/icons";
+import { Space, Input, Form, Button, Card } from "antd";
+import { useApi } from "../hooks/useApi";
 
-const CardForm = ({ items, cardProps, ...rest }) => {
-  const labelColStyle = { width: "30%" };
-  const contentColStyle = { width: "70%" };
-  const formItems = [];
-
-  for (const item of items)
-    formItems.push(
-      <Form.Item {...item.itemProps}>
-        <Row>
-          <Col style={labelColStyle}>
-            <Typography.Text strong>{item.label}</Typography.Text>
-          </Col>
-          <Col style={contentColStyle}>
-            <Typography.Text>{item.content}</Typography.Text>
-          </Col>
-        </Row>
-      </Form.Item>
-    );
-
+function PasswordInputGroup({ disabled, ...rest }) {
   return (
-    <Card {...cardProps} style={{ width: "60%" }}>
-      <Form {...rest}>
-        {formItems.map((item, index) => (
-          <>
-            {index > 0 && <Divider />}
-            {item}
-          </>
-        ))}
-      </Form>
-    </Card>
+    <Input.Group {...rest}>
+      <Form.Item name={["password", "password"]}>
+        <Input.Password placeholder="Type old password here" />
+      </Form.Item>
+      <Form.Item name={["password", "new_password"]}>
+        <Input.Password
+          placeholder="Type new password here"
+          disabled={disabled}
+        />
+      </Form.Item>
+    </Input.Group>
   );
-};
+}
 
-export default function ProfilePage() {
-  const authState = useContext(AuthContext);
-
+function ProfileSettingsForm({
+  user,
+  submitButtonComponent: SubmitButton,
+  tailLayout,
+  ...rest
+}) {
   const [fields, setFields] = useState([
     {
       name: ["username"],
-      value: authState.user?.username,
+      value: user.username,
     },
     {
-      name: ["password"],
-      value: "",
+      name: ["password", "password"],
+      value: null,
+    },
+    {
+      name: ["password", "new_password"],
+      value: null,
     },
   ]);
 
-  const handleFinish = (values) => {
-    console.log("Submited");
+  return (
+    <Form
+      initialValues={user}
+      {...rest}
+      onFieldsChange={(_, allFields) => setFields(allFields)}
+    >
+      <Form.Item label="Username" name="username">
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label="Email"
+        required={false}
+        hasFeedback
+        validateStatus={user.email_confirmed ? "success" : "warning"}
+      >
+        <Input value={user.email} disabled />
+      </Form.Item>
+      <Form.Item label="Password">
+        <PasswordInputGroup disabled={!fields[1].value} />
+      </Form.Item>
+      <Form.Item style={{ float: "right" }}>
+        <SubmitButton
+          type="primary"
+          form={rest.name}
+          htmlType="submit"
+          disabled={!(fields[0].touched || fields[2].touched)}
+        >
+          Save
+        </SubmitButton>
+      </Form.Item>
+    </Form>
+  );
+}
+
+export default function ProfilePage() {
+  const authState = useContext(AuthContext);
+  const execute = useApi();
+
+  const handleFinish = async (values) => {
+    const [res, data] = await execute("users/@me", {
+      method: "PUT",
+      body: JSON.stringify({ username: values.username, ...values.password }),
+    });
   };
 
-  const items = [
-    {
-      label: "Username",
-      content: <Input value={fields[0].value ?? authState.user?.username} />,
-      itemProps: { name: "username" },
-    },
-    {
-      label: "Email",
-      content: (
-        <Input
-          value={authState.user?.email}
-          addonAfter={
-            authState.user?.email_confirmed ? (
-              <CheckOutlined style={{ color: "green" }} />
-            ) : (
-              <WarningOutlined style={{ color: "red" }} />
-            )
-          }
-          disabled
-        />
-      ),
-    },
-    {
-      label: "Password",
-      content: <Input.Password placeholder="Type new password here" />,
-      itemProps: { name: "password" },
-    },
-  ];
+  const profileFormLayout = { labelCol: { span: 4, pull: 1 } };
 
-  // TODO: use just form and layout (may be layout={grid} or something)
-  // TODO: move fields inside form component
   return (
-    <CardForm
-      title="Profile settings"
-      items={items}
-      fields={fields}
-      name="profileSettingsForm"
-      onFieldsChange={(_, allFields) => setFields(allFields)}
-      onFinish={handleFinish}
-      cardProps={{
-        title: "Profile settings",
-        actions: [
-          <Button
-            form="profileSettingsForm"
-            type="primary"
-            htmlType="submit"
-            disabled={!fields.some((f) => f.touched)}
-            style={{ float: "right", marginRight: "1vw" }}
-            size="large"
-          >
-            Save
-          </Button>,
-        ],
-      }}
-    />
+    authState.user !== null && (
+      <Card style={{ maxWidth: "50vw" }}>
+        <ProfileSettingsForm
+          {...profileFormLayout}
+          size="large"
+          user={authState.user}
+          name="profileSettingsForm"
+          onFinish={handleFinish}
+          submitButtonComponent={Button}
+        />
+      </Card>
+    )
   );
 }

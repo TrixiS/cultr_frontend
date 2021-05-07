@@ -26,5 +26,5 @@ export const useApi = () => {
     return [res, data];
   };
 
-  return { execute: useCallback(execute, []) };
+  return useCallback(execute, []);
 };

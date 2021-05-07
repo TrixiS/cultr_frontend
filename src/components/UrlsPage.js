@@ -40,7 +40,7 @@ export default function UrlsPage() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const { isLoading, setIsLoading } = useLoading(true);
-  const { execute } = useApi();
+  const execute = useApi();
 
   useEffect(() => {
     const fetchTableData = async () => {
