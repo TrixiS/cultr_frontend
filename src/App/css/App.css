@@ -1,0 +1,9 @@
+.centered {
+  display: flex;
+  justify-content: center;
+}
+
+.ant-row-rtl {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
