@@ -1,12 +1,13 @@
+import { useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import { useEffect } from "react";
+import { AuthContext } from "../context/authContext";
 
-function LogoutPage(props) {
+export default function LogoutPage({ referrer }) {
+  const authState = useContext(AuthContext);
+
   useEffect(() => {
-    props.setAccessToken(null);
+    authState.setAccessToken(null);
   });
 
-  return <Redirect to={props.referrer ?? "/"} />;
+  return <Redirect to={referrer ?? "/"} />;
 }
-
-export default LogoutPage;

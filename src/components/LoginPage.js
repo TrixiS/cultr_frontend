@@ -17,7 +17,7 @@ function login(username, password) {
   return fetch(process.env.REACT_APP_API_URL + "token", requestOptions);
 }
 
-export default function LoginPage({ setAccessToken, referrer }) {
+export default function LoginPage({ referrer }) {
   const [loginError, setLoginError] = useState(null);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const authState = useContext(AuthContext);
@@ -26,7 +26,7 @@ export default function LoginPage({ setAccessToken, referrer }) {
     login(values.username, values.password).then((res) =>
       res.json().then((data) => {
         if (res.ok) {
-          setAccessToken(data.access_token);
+          authState.setAccessToken(data.access_token);
           setShouldRedirect(true);
           return;
         }
