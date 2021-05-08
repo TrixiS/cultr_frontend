@@ -33,6 +33,8 @@ const localStorageTokenKey = "accessToken";
 const useUserTokenState = createPersistedState(localStorageTokenKey);
 
 // TODO: logo
+// TODO: handle 403 api error
+// TODO: fix error boundary, push children if error handler returns undefined
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,16 +43,13 @@ export default function App() {
   );
   const [authState, setAuthState] = useState({
     accessToken,
+    setAccessToken,
     user: null,
   });
 
-  // useEffect(() => {
-  //   setIsLoading(false);
-  // }, [isLoading]);
-
   useEffect(() => {
     if (accessToken === null) {
-      setAuthState({ accessToken: null, user: null });
+      setAuthState((state) => ({ ...state, accessToken: null, user: null }));
       return;
     }
 
@@ -58,20 +57,15 @@ export default function App() {
 
     fetchApi("users/@me", { method: "GET" }, accessToken).then(
       ([res, data]) => {
-        setAuthState({ accessToken, user: res.ok ? data : null });
+        setAuthState((state) => ({
+          ...state,
+          accessToken,
+          user: res.ok ? data : null,
+        }));
         setIsLoading(false);
       }
     );
   }, [accessToken]);
-
-  const handleError = (error) => {
-    if (error.status === 401 && !isLoading) {
-      setAccessToken(null);
-      return <Redirect to="/login" />;
-    }
-
-    return <div>Something went wrong :(</div>;
-  };
 
   return (
     <Router>
@@ -105,14 +99,10 @@ export default function App() {
                           <LogoutPage setAccessToken={setAccessToken} />
                         </Route>
                         <PrivateRoute exact path="/urls">
-                          <ErrorBoundary onError={handleError}>
-                            <UrlsPage />
-                          </ErrorBoundary>
+                          <UrlsPage />
                         </PrivateRoute>
                         <PrivateRoute exact path="/profile">
-                          <ErrorBoundary onError={handleError}>
-                            <ProfilePage />
-                          </ErrorBoundary>
+                          <ProfilePage />
                         </PrivateRoute>
                         <Route exact path="/">
                           <HomePage />

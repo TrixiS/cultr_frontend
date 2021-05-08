@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/authContext";
-import { Space, Input, Form, Button, Card } from "antd";
+import { Input, Form, Button, Card } from "antd";
 import { useApi } from "../hooks/useApi";
 
 function PasswordInputGroup({ disabled, ...rest }) {
