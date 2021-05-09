@@ -1,8 +1,7 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Input, Button, Space } from "antd";
 import { AuthContext } from "../context/authContext";
-import "../css/LoginPage.css";
 
 function login(username, password) {
   const formData = new FormData();
@@ -47,9 +46,8 @@ export default function LoginPage({ referrer }) {
     <div className="centered">
       <Space direction="vertical">
         {loginError && (
-          <div className="error">{loginError}</div> // TODO: Error component uses antd.Alert
+          <div style={{ color: "red" }}>{loginError}</div> // TODO: Error component uses antd.Alert
         )}
-
         <Form
           name="login"
           layout="vertical"
@@ -68,7 +66,6 @@ export default function LoginPage({ referrer }) {
           >
             <Input />
           </Form.Item>
-
           <Form.Item
             label="Password"
             name="password"
@@ -81,7 +78,6 @@ export default function LoginPage({ referrer }) {
           >
             <Input.Password />
           </Form.Item>
-
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Submit

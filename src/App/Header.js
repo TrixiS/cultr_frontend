@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { Layout, Menu, Typography } from "antd";
-import { LoginControl } from "../components";
+import { Layout, Menu } from "antd";
+import LoginControl from "./LoginControl";
 
 import "./css/Header.css";
 

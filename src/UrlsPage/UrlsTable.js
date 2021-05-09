@@ -1,65 +1,15 @@
-import {
-  Table,
-  Input,
-  InputNumber,
-  Popconfirm,
-  Form,
-  Typography,
-  Space,
-  Button,
-} from "antd";
 import { useState } from "react";
+import { Table, Popconfirm, Form, Typography, Space, Button } from "antd";
+import EditableTableCell from "./EditableTableCell";
 
-const inputTypeMap = {
-  number: InputNumber,
-  text: Input,
-};
-
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  required,
-  ...restProps
-}) => {
-  const InputComponent = inputTypeMap[inputType];
-
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: required,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          <InputComponent />
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
-
-const EditableTable = ({
+export default function EditableTable({
   tableData,
   setTableData,
   columns,
   onEdit,
   onDelete,
   ...rest
-}) => {
+}) {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record) => record.key === editingKey;
@@ -177,7 +127,7 @@ const EditableTable = ({
         {...rest}
         components={{
           body: {
-            cell: EditableCell,
+            cell: EditableTableCell,
           },
         }}
         bordered
@@ -191,6 +141,4 @@ const EditableTable = ({
       />
     </Form>
   );
-};
-
-export default EditableTable;
+}

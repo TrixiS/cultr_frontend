@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
-import { ErrorBoundary } from ".";
 import { AuthContext } from "../context/authContext";
+import ErrorBoundary from "./ErrorBoundary";
 
 export default function PrivateRoute(props) {
   const authState = useContext(AuthContext);

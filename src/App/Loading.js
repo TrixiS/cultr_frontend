@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Layout, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { LoadingContext } from "../context/loadingContext";
-import "../css/Loading.css";
+import "./css/Loading.css";
 
 const { Content } = Layout;
 const spinner = <LoadingOutlined spin />;

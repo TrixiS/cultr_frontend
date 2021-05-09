@@ -1,9 +1,10 @@
-import "../css/UrlsPage.css";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useApi } from "../hooks/useApi";
 import { useLoading } from "../hooks/useLoading";
-import { CreateLinkButton, EditableTable } from ".";
 import { Typography, Space } from "antd";
+import CreateUrlButton from "./CreateUrlButton";
+import UrlsTable from "./UrlsTable";
+import "./css/UrlsPage.css";
 
 const columns = [
   {
@@ -86,13 +87,12 @@ export default function UrlsPage() {
   return (
     !isLoading && (
       <Space direction="vertical">
-        <CreateLinkButton
+        <CreateUrlButton
           size="large"
           className="create-link-button"
           onCreate={handleCreate}
         />
-        <EditableTable
-          className="urls-table"
+        <UrlsTable
           columns={columns}
           tableData={data.map((item) => {
             item.key = item.id.toString();

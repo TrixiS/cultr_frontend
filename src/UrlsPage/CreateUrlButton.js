@@ -1,7 +1,7 @@
-import { Button, Modal, Form, DatePicker, Input, InputNumber } from "antd";
 import { useState } from "react";
+import { Button, Modal, Form, DatePicker, Input, InputNumber } from "antd";
 
-export default function CreateLinkButton({ onCreate, ...rest }) {
+export default function CreateUrlButton({ onCreate, ...rest }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -13,6 +13,8 @@ export default function CreateLinkButton({ onCreate, ...rest }) {
     setIsLoading(false);
     closeModal();
   };
+
+  // TODO: separate Modal and Button
 
   return (
     <>
@@ -54,7 +56,6 @@ export default function CreateLinkButton({ onCreate, ...rest }) {
           >
             <Input />
           </Form.Item>
-
           <Form.Item
             label="Destination"
             name="destination"
@@ -64,11 +65,9 @@ export default function CreateLinkButton({ onCreate, ...rest }) {
           >
             <Input />
           </Form.Item>
-
           <Form.Item label="Max uses" name="max_uses">
             <InputNumber />
           </Form.Item>
-
           <Form.Item label="Expiration date" name="expiration_datetime">
             <DatePicker showTime format="YYYY-MM-DDTHH:mm:ssZ" />
           </Form.Item>

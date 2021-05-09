@@ -3,20 +3,17 @@ import MainContainer from "./MainContainer";
 import Header from "./Header";
 import Content from "./Content";
 
-import {
-  HomePage,
-  PrivateRoute,
-  LoginPage,
-  UrlsPage,
-  ProfilePage,
-} from "../components";
+import PrivateRoute from "./PrivateRoute";
+import { LoginPage, LogoutPage } from "../LoginPage/";
+import { HomePage } from "../HomePage/";
+import { UrlsPage } from "../UrlsPage/";
+import { ProfilePage } from "../ProfilePage/";
 
 import "./css/App.css";
 import "antd/dist/antd.css";
 
 // TODO: logo
 // TODO: handle 403 api error
-// TODO: fix error boundary, push children if error handler returns undefined
 
 export default function App() {
   return (
@@ -26,6 +23,7 @@ export default function App() {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/logout" component={LogoutPage} />
           <PrivateRoute exact path="/urls" component={UrlsPage} />
           <PrivateRoute exact path="/profile" component={ProfilePage} />
         </Switch>

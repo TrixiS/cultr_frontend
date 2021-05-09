@@ -1,4 +1,4 @@
-import { Loading } from "../components";
+import Loading from "./Loading";
 import { Layout } from "antd";
 
 import "./css/Content.css";
