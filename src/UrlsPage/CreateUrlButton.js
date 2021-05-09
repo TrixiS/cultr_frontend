@@ -54,7 +54,7 @@ export default function CreateUrlButton({ onCreate, ...rest }) {
             name="name"
             rules={[{ required: true, message: "Please input link name!" }]}
           >
-            <Input />
+            <Input placeholder="Some cool name" />
           </Form.Item>
           <Form.Item
             label="Destination"
@@ -63,10 +63,10 @@ export default function CreateUrlButton({ onCreate, ...rest }) {
               { required: true, message: "Please input link destination!" },
             ]}
           >
-            <Input />
+            <Input placeholder="https://google.com" />
           </Form.Item>
           <Form.Item label="Max uses" name="max_uses">
-            <InputNumber />
+            <InputNumber placeholder="Infinite" />
           </Form.Item>
           <Form.Item label="Expiration date" name="expiration_datetime">
             <DatePicker showTime format="YYYY-MM-DDTHH:mm:ssZ" />

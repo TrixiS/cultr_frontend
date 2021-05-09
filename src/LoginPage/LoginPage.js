@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Input, Button, Space } from "antd";
 import { AuthContext } from "../context/authContext";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 function login(username, password) {
   const formData = new FormData();
@@ -55,7 +56,6 @@ export default function LoginPage({ referrer }) {
           size="large"
         >
           <Form.Item
-            label="Username"
             name="username"
             rules={[
               {
@@ -64,10 +64,9 @@ export default function LoginPage({ referrer }) {
               },
             ]}
           >
-            <Input />
+            <Input prefix={<UserOutlined />} placeholder="Username" />
           </Form.Item>
           <Form.Item
-            label="Password"
             name="password"
             rules={[
               {
@@ -76,7 +75,7 @@ export default function LoginPage({ referrer }) {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">

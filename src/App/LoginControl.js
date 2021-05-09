@@ -12,7 +12,9 @@ function UserMenu({ authState, ...rest }) {
       {...rest}
     >
       <MenuLink to="/profile">Profile</MenuLink>
-      <MenuLink to="/logout">Log out</MenuLink>
+      <MenuLink to="/logout" danger>
+        Log out
+      </MenuLink>
     </Menu.SubMenu>
   );
 }
