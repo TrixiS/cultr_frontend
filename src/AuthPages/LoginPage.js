@@ -1,8 +1,9 @@
 import { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import { Redirect } from "react-router-dom";
-import { Form, Input, Button, Space } from "antd";
+import { Space, Form, Button } from "antd";
 import { AuthContext } from "../context/authContext";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import LoginForm from "./LoginForm";
 
 function login(username, password) {
   const formData = new FormData();
@@ -17,10 +18,18 @@ function login(username, password) {
   return fetch(process.env.REACT_APP_API_URL + "token", requestOptions);
 }
 
-export default function LoginPage({ referrer }) {
+export default function LoginPage({ referrer, location }) {
   const [loginError, setLoginError] = useState(null);
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const authState = useContext(AuthContext);
+  const { username, password } = location?.state ?? {};
+
+  if (
+    shouldRedirect &&
+    authState.accessToken !== null &&
+    authState.user !== null
+  )
+    return <Redirect to={referrer ?? "/"} />;
 
   const handleFinish = (values) => {
     login(values.username, values.password).then((res) =>
@@ -36,53 +45,21 @@ export default function LoginPage({ referrer }) {
     );
   };
 
-  if (
-    shouldRedirect &&
-    authState.accessToken !== null &&
-    authState.user !== null
-  )
-    return <Redirect to={referrer ?? "/"} />;
-
   return (
     <div className="centered">
       <Space direction="vertical">
         {loginError && (
           <div style={{ color: "red" }}>{loginError}</div> // TODO: Error component uses antd.Alert
         )}
-        <Form
+        <LoginForm
           name="login"
-          layout="vertical"
-          onFinish={(values) => handleFinish(values)}
-          size="large"
+          onFinish={handleFinish}
+          initialValues={{ username, password }}
         >
-          <Form.Item
-            name="username"
-            rules={[
-              {
-                required: true,
-                message: "You have to specify your username",
-              },
-            ]}
-          >
-            <Input prefix={<UserOutlined />} placeholder="Username" />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "You have to specify your password",
-              },
-            ]}
-          >
-            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-          </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
+            Or <Link to="/register">register now!</Link>
           </Form.Item>
-        </Form>
+        </LoginForm>
       </Space>
     </div>
   );

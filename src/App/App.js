@@ -4,7 +4,7 @@ import Header from "./Header";
 import Content from "./Content";
 
 import PrivateRoute from "./PrivateRoute";
-import { LoginPage, LogoutPage } from "../LoginPage/";
+import { LoginPage, LogoutPage, RegisterPage } from "../AuthPages/";
 import { HomePage } from "../HomePage/";
 import { UrlsPage } from "../UrlsPage/";
 import { ProfilePage } from "../ProfilePage/";
@@ -24,6 +24,7 @@ export default function App() {
           <Route exact path="/" component={HomePage} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/logout" component={LogoutPage} />
+          <Route exact path="/register" component={RegisterPage} />
           <PrivateRoute exact path="/urls" component={UrlsPage} />
           <PrivateRoute exact path="/profile" component={ProfilePage} />
         </Switch>
