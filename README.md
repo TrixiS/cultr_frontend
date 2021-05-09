@@ -1,5 +1,16 @@
-# cultr
-Backend and project description -> https://github.com/TrixiS/cultr
+# Cultr
+Укоротитель ссылок (frontend)
 
-# Build and run
-Use `docker-compose.yaml` from [this repo](https://github.com/TrixiS/cultr)
+# Установка и запуск
+1. Установите [NodeJS](https://nodejs.org)
+2. (опционально) отредактируйте переменные среды в `.env`
+3. `npm install .`
+4. `npm install -g serve`
+5. `npm run build`
+6. `serve -s build -p 3000`
+7. http://localhost:3000
+
+# Важно
+Функция копирования ссылки для редиректа будет записывать в буфер обмена ссылку на фронтенд приложение, которая работать не будет (потому что нужна ссылка на бакенд). Чтобы исправить эту проблему, замените порт в ссылке на порт, на котором у вас работает бакенд.
+
+*(эта проблема решается автоматически при развертывании приложения через Docker, т. к. в билде используется nginx и reverse-proxy через него)*
