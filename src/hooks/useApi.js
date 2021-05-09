@@ -9,7 +9,14 @@ export const fetchApi = async (method, options, token) => {
   }
 
   const response = await fetch(process.env.REACT_APP_API_URL + method, options);
-  const data = await response.json();
+  let data;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
   return [response, data];
 };
 
