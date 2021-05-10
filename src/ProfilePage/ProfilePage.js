@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useApi } from "../hooks/useApi";
 import { AuthContext } from "../context/authContext";
 import { Input, Form, Button, Card } from "antd";
+import CenteredRow from "../CenteredRow";
 
 function PasswordInputGroup({ disabled, ...rest }) {
   return (
@@ -46,18 +47,20 @@ function ProfileSettingsForm({
       {...rest}
       onFieldsChange={(_, allFields) => setFields(allFields)}
     >
-      <Form.Item label="Username" name="username">
-        <Input />
+      <Form.Item
+        name="username"
+        rules={[{ required: true, message: "Username is required" }]}
+      >
+        <Input placeholder="Enter username here" />
       </Form.Item>
       <Form.Item
-        label="Email"
         required={false}
         hasFeedback
         validateStatus={user.email_confirmed ? "success" : "warning"}
       >
         <Input value={user.email} disabled />
       </Form.Item>
-      <Form.Item label="Password">
+      <Form.Item>
         <PasswordInputGroup disabled={!fields[1].value} />
       </Form.Item>
       <Form.Item style={{ float: "right" }}>
@@ -65,7 +68,9 @@ function ProfileSettingsForm({
           type="primary"
           form={rest.name}
           htmlType="submit"
-          disabled={!(fields[0].touched || fields[2].touched)}
+          disabled={
+            !(fields[0].touched || fields[2].touched) || !fields[0].value
+          }
         >
           Save
         </SubmitButton>
@@ -89,16 +94,18 @@ export default function ProfilePage() {
 
   return (
     authState.user !== null && (
-      <Card style={{ maxWidth: "50vw" }}>
-        <ProfileSettingsForm
-          {...profileFormLayout}
-          size="large"
-          user={authState.user}
-          name="profileSettingsForm"
-          onFinish={handleFinish}
-          submitButtonComponent={Button}
-        />
-      </Card>
+      <CenteredRow>
+        <Card title="Profile Settings">
+          <ProfileSettingsForm
+            {...profileFormLayout}
+            size="large"
+            user={authState.user}
+            name="profileSettingsForm"
+            onFinish={handleFinish}
+            submitButtonComponent={Button}
+          />
+        </Card>
+      </CenteredRow>
     )
   );
 }
