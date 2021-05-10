@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Typography } from "antd";
 import LoginControl from "./LoginControl";
 import MenuLink from "./MenuLink";
 
@@ -11,8 +11,12 @@ export default function Header() {
 
   return (
     <Layout.Header>
-      <Menu theme="dark" mode="horizontal">
-        <MenuLink to="/">Home</MenuLink>
+      <Menu className="unselectable" theme="dark" mode="horizontal">
+        <MenuLink to="/">
+          <Typography.Text style={{ float: "left", color: "white" }} strong>
+            CULTR
+          </Typography.Text>
+        </MenuLink>
         <MenuLink to="/urls" hidden={authState.user === null}>
           Urls
         </MenuLink>
