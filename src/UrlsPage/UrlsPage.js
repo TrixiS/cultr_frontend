@@ -18,7 +18,11 @@ const columns = [
     dataIndex: "destination",
     width: "40%",
     editable: true,
-    render: (text) => <Typography.Link href={text}>{text}</Typography.Link>,
+    render: (text) => (
+      <Typography.Link href={text} target="_blank">
+        {text}
+      </Typography.Link>
+    ),
   },
   {
     title: "Uses",

@@ -16,6 +16,8 @@ import "antd/dist/antd.css";
 // TODO: handle 403 api error
 
 export default function App() {
+  console.log(process.env.REACT_APP_API_URL);
+
   return (
     <MainContainer>
       <Header />
