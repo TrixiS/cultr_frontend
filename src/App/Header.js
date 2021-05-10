@@ -11,7 +11,12 @@ export default function Header() {
 
   return (
     <Layout.Header>
-      <Menu className="unselectable" theme="dark" mode="horizontal">
+      <Menu
+        className="unselectable"
+        theme="dark"
+        mode="horizontal"
+        selectable={false}
+      >
         <MenuLink to="/">
           <Typography.Text style={{ float: "left", color: "white" }} strong>
             CULTR

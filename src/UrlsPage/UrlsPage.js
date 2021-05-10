@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useApi } from "../hooks/useApi";
 import { useLoading } from "../hooks/useLoading";
-import { Typography, Space } from "antd";
+import { Typography, Space, Button } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 import CreateUrlButton from "./CreateUrlButton";
 import UrlsTable from "./UrlsTable";
-import "./css/UrlsPage.css";
 
 const columns = [
   {
@@ -84,14 +84,20 @@ export default function UrlsPage() {
     if (res.ok) setData([...data, resData]);
   };
 
+  const handleReload = () => {
+    setData([]);
+    setCurrentPage(1);
+  };
+
   return (
     !isLoading && (
       <Space direction="vertical">
-        <CreateUrlButton
-          size="large"
-          className="create-link-button"
-          onCreate={handleCreate}
-        />
+        <Space direction="horizontal" style={{ float: "right" }}>
+          <Button size="large" onClick={handleReload}>
+            <ReloadOutlined />
+          </Button>
+          <CreateUrlButton size="large" onCreate={handleCreate} />
+        </Space>
         <UrlsTable
           columns={columns}
           tableData={data.map((item) => {
